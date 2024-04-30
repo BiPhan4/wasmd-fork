@@ -394,7 +394,9 @@ func (k Keeper) migrate(ctx sdk.Context, contractAddress sdk.AccAddress, caller 
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unknown contract")
 	}
 	if !authZ.CanModifyContract(contractInfo.AdminAddr(), caller) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "can not migrate")
+		adminAddress := contractInfo.AdminAddr().String()
+		output := fmt.Sprintf("admin address is: %s and caller is: %s", adminAddress, caller)
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, output)
 	}
 
 	newCodeInfo := k.GetCodeInfo(ctx, newCodeID)
